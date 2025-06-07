@@ -12,6 +12,7 @@ import RoutePanel from '@/components/RoutePanel';
 import CommunityReports from '@/components/CommunityReports';
 import LiveTracking from '@/components/LiveTracking';
 import OfflineMode from '@/components/OfflineMode';
+import DelhiRoutes from '@/components/DelhiRoutes';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('map');
@@ -84,6 +85,7 @@ const Index = () => {
         <div className="flex gap-2 overflow-x-auto pb-2">
           {[
             { id: 'map', label: 'Safety Map', badge: 'Live' },
+            { id: 'delhi', label: 'Delhi Routes', badge: 'NCR' },
             { id: 'routes', label: 'Safe Routes', badge: 'AI' },
             { id: 'reports', label: 'Community Reports', badge: '24' },
             { id: 'tracking', label: 'Live Tracking', badge: 'New' }
@@ -107,6 +109,7 @@ const Index = () => {
         {/* Tab Content */}
         <div className="animate-slide-up">
           {activeTab === 'map' && <SafetyMap />}
+          {activeTab === 'delhi' && <DelhiRoutes />}
           {activeTab === 'routes' && <RoutePanel destination={destination} />}
           {activeTab === 'reports' && <CommunityReports />}
           {activeTab === 'tracking' && <LiveTracking />}
