@@ -88,7 +88,8 @@ const Index = () => {
             { id: 'delhi', label: 'Delhi Routes', badge: 'NCR' },
             { id: 'routes', label: 'Safe Routes', badge: 'AI' },
             { id: 'reports', label: 'Community Reports', badge: '24' },
-            { id: 'tracking', label: 'Live Tracking', badge: 'New' }
+            { id: 'tracking', label: 'Live Tracking', badge: 'New' },
+            { id: 'contacts', label: 'Safety Contacts', badge: 'Emergency' }
           ].map((tab) => (
             <Button
               key={tab.id}
@@ -113,6 +114,7 @@ const Index = () => {
           {activeTab === 'routes' && <RoutePanel destination={destination} />}
           {activeTab === 'reports' && <CommunityReports />}
           {activeTab === 'tracking' && <LiveTracking />}
+          {activeTab === 'contacts' && <SafetyContacts />}
         </div>
       </div>
     </div>
