@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +12,7 @@ import CommunityReports from '@/components/CommunityReports';
 import LiveTracking from '@/components/LiveTracking';
 import OfflineMode from '@/components/OfflineMode';
 import DelhiRoutes from '@/components/DelhiRoutes';
+import SafetyContacts from '@/components/SafetyContacts';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('map');
