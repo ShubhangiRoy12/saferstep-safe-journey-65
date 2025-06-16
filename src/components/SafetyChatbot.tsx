@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { X, Send, MapPin, Shield, AlertTriangle, Phone } from 'lucide-react';
+import { X, Send, MapPin, Shield, AlertTriangle, Phone, Settings } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -33,6 +33,8 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [apiKey, setApiKey] = useState<string>('');
+  const [showApiInput, setShowApiInput] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           });
+          console.log('Location obtained:', position.coords);
         },
         (error) => {
           console.log('Location access denied:', error);
@@ -60,95 +63,141 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const generateAIResponse = (userMessage: string): Message => {
+  const callExternalAPI = async (userMessage: string): Promise<string> => {
+    if (!apiKey) {
+      throw new Error('No API key provided');
+    }
+
+    try {
+      // Example API call structure - replace with your preferred AI service
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a safety assistant for SaferStep app. Help users with safety information, route planning, and emergency assistance. Be concise and helpful.'
+            },
+            {
+              role: 'user',
+              content: userMessage
+            }
+          ],
+          max_tokens: 150,
+          temperature: 0.7,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content;
+    } catch (error) {
+      console.error('API call failed:', error);
+      throw error;
+    }
+  };
+
+  const generateLocalResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
-    const messageId = Date.now().toString();
     
+    console.log('Generating response for:', message);
+
     // Emergency trigger patterns
     if (message.includes('sos') || message.includes('emergency') || message.includes('help me') || message.includes('trigger emergency')) {
       setTimeout(() => onEmergencyTrigger(), 1000);
-      return {
-        id: messageId,
-        content: "🚨 Emergency mode activated! I'm triggering your SOS alert and contacting your emergency contacts immediately. Stay calm, help is on the way.",
-        isUser: false,
-        timestamp: new Date(),
-        type: 'emergency'
-      };
+      return "🚨 Emergency mode activated! I'm triggering your SOS alert and contacting your emergency contacts immediately. Stay calm, help is on the way.";
     }
 
     // Location safety queries
-    if (message.includes('safe') && (message.includes('area') || message.includes('location') || message.includes('here'))) {
-      const safetyScore = Math.floor(Math.random() * 30) + 70; // Random score between 70-100
-      return {
-        id: messageId,
-        content: `Based on real-time data analysis, your current area has a safety score of ${safetyScore}/100. ${safetyScore > 85 ? '✅ This area is considered very safe with good lighting and active community monitoring.' : safetyScore > 75 ? '⚠️ This area has moderate safety. Stay alert and stick to well-lit paths.' : '🔴 Exercise caution in this area. Consider using our SaferStep recommended routes.'}`,
-        isUser: false,
-        timestamp: new Date(),
-        type: 'location'
-      };
+    if ((message.includes('safe') || message.includes('safety')) && (message.includes('area') || message.includes('location') || message.includes('here') || message.includes('this'))) {
+      const safetyScore = Math.floor(Math.random() * 30) + 70;
+      return `Based on real-time data analysis, your current area has a safety score of ${safetyScore}/100. ${safetyScore > 85 ? '✅ This area is considered very safe with good lighting and active community monitoring.' : safetyScore > 75 ? '⚠️ This area has moderate safety. Stay alert and stick to well-lit paths.' : '🔴 Exercise caution in this area. Consider using our SaferStep recommended routes.'}`;
     }
 
     // Route planning queries
-    if (message.includes('route') || message.includes('way home') || message.includes('directions') || message.includes('safest way')) {
-      return {
-        id: messageId,
-        content: "🗺️ I'll find the safest route for you! Based on current conditions, I recommend taking Main Street → Park Avenue → Your destination. This route has:\n\n✅ Excellent lighting (95% operational)\n✅ High foot traffic\n✅ Security cameras every 100m\n✅ Emergency call boxes\n\nWould you like me to start navigation with live safety updates?",
-        isUser: false,
-        timestamp: new Date(),
-        type: 'route'
-      };
+    if (message.includes('route') || message.includes('way home') || message.includes('directions') || message.includes('safest way') || message.includes('navigation')) {
+      return "🗺️ I'll find the safest route for you! Based on current conditions, I recommend taking Main Street → Park Avenue → Your destination. This route has:\n\n✅ Excellent lighting (95% operational)\n✅ High foot traffic\n✅ Security cameras every 100m\n✅ Emergency call boxes\n\nWould you like me to start navigation with live safety updates?";
     }
 
     // Location requests
-    if (message.includes('location') || message.includes('where am i') || message.includes('current position')) {
+    if (message.includes('location') || message.includes('where am i') || message.includes('current position') || message.includes('my location')) {
       if (userLocation) {
-        return {
-          id: messageId,
-          content: `📍 Your current location: ${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}\n\nNearby safety features:\n• Police station: 0.3 miles\n• Hospital: 0.8 miles\n• Safe haven (24/7 store): 0.1 miles\n\nWould you like me to analyze the safety of this area?`,
-          isUser: false,
-          timestamp: new Date(),
-          type: 'location'
-        };
+        return `📍 Your current location: ${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}\n\nNearby safety features:\n• Police station: 0.3 miles\n• Hospital: 0.8 miles\n• Safe haven (24/7 store): 0.1 miles\n\nWould you like me to analyze the safety of this area?`;
       } else {
-        return {
-          id: messageId,
-          content: "📍 I need location access to help you better. Please enable location services in your browser settings so I can provide personalized safety information.",
-          isUser: false,
-          timestamp: new Date(),
-          type: 'location'
-        };
+        return "📍 I need location access to help you better. Please enable location services in your browser settings so I can provide personalized safety information.";
       }
     }
 
     // General safety tips
-    if (message.includes('tips') || message.includes('advice') || message.includes('safe')) {
+    if (message.includes('tips') || message.includes('advice') || message.includes('how to')) {
+      return "🛡️ Here are some safety tips for you:\n\n• Trust your instincts - if something feels wrong, it probably is\n• Stay in well-lit, populated areas\n• Keep your phone charged and share your location with trusted contacts\n• Use SaferStep's recommended routes\n• Be aware of your surroundings\n\nWould you like me to set up live tracking for your journey?";
+    }
+
+    // Greetings
+    if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+      return "Hello! I'm your SaferStep safety assistant. I can help you with area safety analysis, route planning, emergency assistance, and safety tips. What would you like help with today?";
+    }
+
+    // Default helpful response
+    return "I understand you're asking about safety. I can help you with:\n\n• Area safety analysis ('Is this area safe?')\n• Safe route planning ('Show me the safest way home')\n• Emergency assistance ('Trigger SOS')\n• Location services ('Where am I?')\n• Safety tips and advice\n\nWhat specific safety information do you need?";
+  };
+
+  const generateAIResponse = async (userMessage: string): Promise<Message> => {
+    const messageId = Date.now().toString();
+    
+    try {
+      let content: string;
+      
+      if (apiKey) {
+        // Try API first if key is available
+        try {
+          content = await callExternalAPI(userMessage);
+        } catch (error) {
+          console.log('API call failed, falling back to local response');
+          content = generateLocalResponse(userMessage);
+        }
+      } else {
+        // Use local response generation
+        content = generateLocalResponse(userMessage);
+      }
+
+      // Determine message type based on content
+      let type: 'normal' | 'location' | 'emergency' | 'route' = 'normal';
+      if (content.includes('🚨') || content.includes('Emergency')) type = 'emergency';
+      else if (content.includes('📍') || content.includes('location')) type = 'location';
+      else if (content.includes('🗺️') || content.includes('route')) type = 'route';
+
       return {
         id: messageId,
-        content: "🛡️ Here are some safety tips for you:\n\n• Trust your instincts - if something feels wrong, it probably is\n• Stay in well-lit, populated areas\n• Keep your phone charged and share your location with trusted contacts\n• Use SaferStep's recommended routes\n• Be aware of your surroundings\n\nWould you like me to set up live tracking for your journey?",
+        content,
+        isUser: false,
+        timestamp: new Date(),
+        type
+      };
+    } catch (error) {
+      console.error('Error generating response:', error);
+      return {
+        id: messageId,
+        content: "I apologize, but I'm having trouble responding right now. Please try asking your question again, or contact emergency services if this is urgent.",
         isUser: false,
         timestamp: new Date(),
         type: 'normal'
       };
     }
-
-    // Default responses
-    const defaultResponses = [
-      "I understand you're asking about safety. Let me help you with that! You can ask me about:\n\n• Area safety analysis\n• Safe route planning\n• Emergency assistance\n• Location services\n• Safety tips\n\nWhat specific safety information do you need?",
-      "As your safety assistant, I'm here to help keep you secure. I can analyze your current location, plan safe routes, and even trigger emergency alerts if needed. What would you like me to help you with?",
-      "Your safety is my priority! I can provide real-time safety information, route recommendations, and emergency assistance. Try asking me 'Is this area safe?' or 'Show me the safest way home'."
-    ];
-
-    return {
-      id: messageId,
-      content: defaultResponses[Math.floor(Math.random() * defaultResponses.length)],
-      isUser: false,
-      timestamp: new Date(),
-      type: 'normal'
-    };
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
+
+    console.log('Sending message:', inputValue);
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -158,19 +207,28 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI processing time
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(inputValue);
-      setMessages(prev => [...prev, aiResponse]);
+    try {
+      // Generate AI response
+      const aiResponse = await generateAIResponse(currentInput);
+      
+      // Add a small delay for better UX
+      setTimeout(() => {
+        setMessages(prev => [...prev, aiResponse]);
+        setIsTyping(false);
+      }, 500 + Math.random() * 1000);
+    } catch (error) {
+      console.error('Error in handleSendMessage:', error);
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -192,14 +250,37 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
             <Shield className="w-5 h-5" />
             <CardTitle className="text-lg">SaferStep AI</CardTitle>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20">
-            <X className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setShowApiInput(!showApiInput)}
+              className="text-white hover:bg-white/20 p-1"
+            >
+              <Settings className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onClose} className="text-white hover:bg-white/20 p-1">
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
         <div className="flex items-center gap-2 text-sm">
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
           <span>Online & Ready to Help</span>
         </div>
+        
+        {showApiInput && (
+          <div className="mt-2">
+            <Input
+              type="password"
+              placeholder="Enter AI API key (optional)"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              className="text-sm text-black"
+            />
+            <p className="text-xs mt-1 opacity-80">Optional: Add your OpenAI API key for enhanced responses</p>
+          </div>
+        )}
       </CardHeader>
       
       <CardContent className="p-0 flex flex-col h-full">
