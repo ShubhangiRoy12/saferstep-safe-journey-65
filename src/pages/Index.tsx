@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +24,18 @@ const Index = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
   const handleEmergencyTrigger = () => {
+    console.log('Emergency triggered from chatbot');
     setIsEmergencyMode(true);
+    setIsChatbotOpen(false);
+  };
+
+  const handleChatIconClick = () => {
+    console.log('Chat icon clicked, current state:', { isChatbotOpen });
+    setIsChatbotOpen(!isChatbotOpen);
+  };
+
+  const handleChatbotClose = () => {
+    console.log('Chatbot closing');
     setIsChatbotOpen(false);
   };
 
@@ -130,7 +142,7 @@ const Index = () => {
       {isChatbotOpen && (
         <div className="fixed bottom-24 right-6 z-40 animate-slide-up">
           <SafetyChatbot 
-            onClose={() => setIsChatbotOpen(false)}
+            onClose={handleChatbotClose}
             onEmergencyTrigger={handleEmergencyTrigger}
           />
         </div>
@@ -138,7 +150,7 @@ const Index = () => {
 
       {/* Floating Chat Icon */}
       <FloatingChatIcon 
-        onClick={() => setIsChatbotOpen(!isChatbotOpen)}
+        onClick={handleChatIconClick}
         isActive={isChatbotOpen}
       />
     </div>
