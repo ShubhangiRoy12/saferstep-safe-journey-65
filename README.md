@@ -1,73 +1,58 @@
-# Welcome to your Lovable project
+🛡️ SaferStep – Smart Safety Navigator for Safer Journeys
 
-## Project info
+**SaferStep** is our attempt to make city navigation safer, especially for women, students, and solo travelers. It’s a web and mobile app that helps you plan routes based on real-time crime data, community alerts, and AI-driven safety scores — because feeling safe should be part of every journey.
 
-**URL**: https://lovable.dev/projects/726be0b9-db68-4d75-a36d-cf0819f010ca
+---
 
-## How can I edit this code?
+## 💡 Why We Built This
 
-There are several ways of editing your application.
+Ever felt uneasy walking home late at night? We did too. So we thought — what if maps didn’t just show us the fastest route, but the *safest* one?
 
-**Use Lovable**
+That’s how **SaferStep** was born at the Intel Enterprise AI Hackathon, where we wanted to combine **AI, maps, and real-world safety data** to create something that genuinely helps people move more confidently through their cities.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/726be0b9-db68-4d75-a36d-cf0819f010ca) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🚀 What You Can Do with SaferStep
 
-**Use your preferred IDE**
+- 🔐 **Get real-time safe route recommendations**
+- 🗺️ **See live crime heatmaps based on your location**
+- 🧠 **Ask our chatbot things like:**
+  - “Is this area safe right now?”
+  - “What’s the safest way to get home?”
+  - “Alert my emergency contact!”
+- 🆘 **Trigger an emergency panic alert**
+- 💬 **Send or receive crowd-sourced safety updates**
+- 📈 **Check the safety score of any neighborhood**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🧠 Built With
 
-Follow these steps:
+We kept it lightweight and fast using:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Frontend**: React + Vite + TypeScript + Shadcn/UI + TailwindCSS
+- **Backend**: Node.js + Express
+- **AI Models**: Python (for safety prediction + NLP)
+- **Database**: Firebase + MongoDB
+- **APIs**: Google Maps, Twilio, Open Crime Data
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📸 Sneak Peek
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Coming Soon: Screenshots and video demo of real-time safe route planner, chatbot in action, and emergency UI.
+
+---
+
+## 🧪 Try It Yourself
+
+```bash
+# Clone the project
+git clone https://github.com/your-username/saferstep.git
+cd saferstep
+
+# Install dependencies
+npm install
+
+# Start the app
 npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/726be0b9-db68-4d75-a36d-cf0819f010ca) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
