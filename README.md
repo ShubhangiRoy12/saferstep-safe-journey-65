@@ -14,15 +14,15 @@ That’s how **SaferStep** was born at the Intel Enterprise AI Hackathon, where 
 
 ## 🚀 What You Can Do with SaferStep
 
-- 🔐 **Get real-time safe route recommendations**
-- 🗺️ **See live crime heatmaps based on your location**
-- 🧠 **Ask our chatbot things like:**
+- **Get real-time safe route recommendations**
+- **See live crime heatmaps based on your location**
+- **Ask our chatbot things like:**
   - “Is this area safe right now?”
   - “What’s the safest way to get home?”
   - “Alert my emergency contact!”
-- 🆘 **Trigger an emergency panic alert**
-- 💬 **Send or receive crowd-sourced safety updates**
-- 📈 **Check the safety score of any neighborhood**
+- **Trigger an emergency panic alert**
+- **Send or receive crowd-sourced safety updates**
+- **Check the safety score of any neighborhood**
 
 ---
 
@@ -40,11 +40,13 @@ We kept it lightweight and fast using:
 
 ## 📸 Sneak Peek
 
-Coming Soon: Screenshots and video demo of real-time safe route planner, chatbot in action, and emergency UI.
+Screenshots and video demo of real-time safe route planner, chatbot in action, and emergency UI.
+![image](https://github.com/user-attachments/assets/6e66fdc2-7fd4-4505-949b-4684ebd63b51)
+
 
 ---
 
-## 🧪 Try It Yourself
+## Try It Yourself
 
 ```bash
 # Clone the project
