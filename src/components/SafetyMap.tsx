@@ -47,8 +47,8 @@ const SafetyMap = () => {
     <div className="grid lg:grid-cols-3 gap-6">
       {/* Map Visualization */}
       <div className="lg:col-span-2">
-        <Card className="h-96 border-2 border-purple-200">
-          <CardHeader className="safety-gradient text-white">
+        <Card className="h-96 border-2 border-empowerment-violet/30">
+          <CardHeader className="empowerment-gradient text-white">
             <CardTitle className="flex items-center gap-2">
               <MapPin className="w-5 h-5" />
               Live Safety Heatmap
@@ -56,7 +56,7 @@ const SafetyMap = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="relative h-64 bg-gradient-to-br from-purple-50 to-pink-50 overflow-hidden">
+            <div className="relative h-64 bg-gradient-to-br from-empowerment-violet/5 to-careful-pink/10 overflow-hidden">
               {/* Simulated Map with 3x2 Grid Layout */}
               <div className="absolute inset-0 p-4">
                 <div className="grid grid-cols-3 grid-rows-2 gap-2 h-full">
@@ -96,9 +96,9 @@ const SafetyMap = () => {
                 </div>
               </div>
               
-              {/* Legend */}
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-purple-200">
-                <div className="text-xs font-semibold mb-2 text-purple-800">Risk Level</div>
+              {/* Legend - Moved down to avoid covering riverside park */}
+              <div className="absolute bottom-2 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-empowerment-violet/20">
+                <div className="text-xs font-semibold mb-2 text-empowerment-violet">Risk Level</div>
                 <div className="flex gap-3">
                   <div className="flex items-center gap-1">
                     <div className="w-3 h-3 zone-safe rounded"></div>

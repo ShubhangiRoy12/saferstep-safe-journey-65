@@ -33,7 +33,7 @@ const OfflineMode = () => {
         <Button 
           variant="outline" 
           size="sm"
-          className={isOfflineReady ? "bg-green-50 border-green-500 text-green-700" : ""}
+          className={`${isOfflineReady ? "bg-green-50 border-green-500" : ""} text-black font-semibold`}
         >
           {isOfflineReady ? "📱 Offline Ready" : "📴 Offline Mode"}
         </Button>

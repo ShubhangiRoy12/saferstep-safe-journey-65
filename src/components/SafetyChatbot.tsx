@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -114,6 +113,23 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
     if (message.includes('sos') || message.includes('emergency') || message.includes('help me') || message.includes('trigger emergency')) {
       setTimeout(() => onEmergencyTrigger(), 1000);
       return "🚨 Emergency mode activated! I'm triggering your SOS alert and contacting your emergency contacts immediately. Stay calm, help is on the way.";
+    }
+
+    // Safety score queries
+    if (message.includes('safety score') || message.includes('score of') || (message.includes('what') && message.includes('safety') && message.includes('location'))) {
+      const safetyScore = Math.floor(Math.random() * 30) + 70;
+      return `📊 **Current Location Safety Score: ${safetyScore}/100**\n\n${safetyScore > 85 ? '✅ **Excellent Safety Rating**\n• Well-lit streets (98% functional)\n• High foot traffic\n• Active security presence\n• Low crime incidents (0.2/1000)' : safetyScore > 75 ? '⚠️ **Good Safety Rating**\n• Adequate lighting (85% functional)\n• Moderate foot traffic\n• Some security coverage\n• Low-medium crime incidents (1.5/1000)' : '🔴 **Moderate Safety - Exercise Caution**\n• Limited lighting (60% functional)\n• Low foot traffic\n• Minimal security presence\n• Medium crime incidents (4.2/1000)'}\n\nWould you like me to suggest safer nearby routes?`;
+    }
+
+    // Safer path queries
+    if (message.includes('safer path') || message.includes('avoiding dark') || message.includes('isolated areas') || (message.includes('avoid') && (message.includes('alley') || message.includes('dark')))) {
+      return "🛡️ **Safer Route Analysis Complete**\n\n✅ **Recommended Safe Path:**\n• Main Street → Well-lit Boulevard → Your destination\n• **Avoids:** 2 dark alleys, 1 isolated underpass\n• **Safety features:** Street lighting every 50m, CCTV coverage, regular foot traffic\n\n⚠️ **Areas to avoid:**\n• Industrial backstreets (poor lighting)\n• Park shortcuts after 7 PM\n• Construction zones with limited visibility\n\n🕐 **Estimated time:** +3 minutes for maximum safety\n\nWould you like me to start live navigation with safety alerts?";
+    }
+
+    // Harassment reports queries
+    if (message.includes('harassment') || message.includes('harassment reports') || (message.includes('reports') && message.includes('area'))) {
+      const reportCount = Math.floor(Math.random() * 5);
+      return `📋 **Area Safety Report - Harassment Data**\n\n${reportCount === 0 ? '✅ **No Recent Reports**\nNo harassment incidents reported in this area in the past 30 days.' : `⚠️ **${reportCount} Recent Report${reportCount > 1 ? 's' : ''}**\n• Last incident: ${Math.floor(Math.random() * 7) + 1} days ago\n• Type: Verbal harassment\n• Time: Evening hours (6-9 PM)\n• Location: Near transit stops`}\n\n🛡️ **Safety Recommendations:**\n• Stay in well-lit, populated areas\n• Use main streets instead of shortcuts\n• Consider traveling with others during evening hours\n• Report any incidents immediately\n\nWould you like me to suggest the safest route and share your location with trusted contacts?`;
     }
 
     // Location safety queries
@@ -354,17 +370,25 @@ const SafetyChatbot = ({ onClose, onEmergencyTrigger }: SafetyChatbotProps) => {
               variant="outline"
               size="sm"
               className="text-xs"
-              onClick={() => setInputValue("Is this area safe right now?")}
+              onClick={() => setInputValue("What's the safety score of my current location?")}
             >
-              Area Safety
+              Safety Score
             </Button>
             <Button
               variant="outline"
               size="sm"
               className="text-xs"
-              onClick={() => setInputValue("Show me the safest way home")}
+              onClick={() => setInputValue("Is there a safer path avoiding dark alleys?")}
             >
-              Safe Route
+              Safer Path
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              onClick={() => setInputValue("Have there been any harassment reports in this area?")}
+            >
+              Area Reports
             </Button>
             <Button
               variant="outline"
