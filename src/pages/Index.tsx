@@ -13,11 +13,19 @@ import LiveTracking from '@/components/LiveTracking';
 import OfflineMode from '@/components/OfflineMode';
 import DelhiRoutes from '@/components/DelhiRoutes';
 import SafetyContacts from '@/components/SafetyContacts';
+import SafetyChatbot from '@/components/SafetyChatbot';
+import FloatingChatIcon from '@/components/FloatingChatIcon';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('map');
   const [destination, setDestination] = useState('');
   const [isEmergencyMode, setIsEmergencyMode] = useState(false);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+  const handleEmergencyTrigger = () => {
+    setIsEmergencyMode(true);
+    setIsChatbotOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100">
@@ -117,6 +125,22 @@ const Index = () => {
           {activeTab === 'contacts' && <SafetyContacts />}
         </div>
       </div>
+
+      {/* Floating AI Chatbot */}
+      {isChatbotOpen && (
+        <div className="fixed bottom-24 right-6 z-40 animate-slide-up">
+          <SafetyChatbot 
+            onClose={() => setIsChatbotOpen(false)}
+            onEmergencyTrigger={handleEmergencyTrigger}
+          />
+        </div>
+      )}
+
+      {/* Floating Chat Icon */}
+      <FloatingChatIcon 
+        onClick={() => setIsChatbotOpen(!isChatbotOpen)}
+        isActive={isChatbotOpen}
+      />
     </div>
   );
 };
