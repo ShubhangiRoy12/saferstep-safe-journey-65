@@ -27,18 +27,18 @@ const SafetyMap = () => {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'bg-green-500';
-      case 'medium': return 'bg-amber-500';
-      case 'high': return 'bg-red-500';
+      case 'low': return 'zone-safe';
+      case 'medium': return 'zone-moderate';
+      case 'high': return 'zone-danger';
       default: return 'bg-gray-500';
     }
   };
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-      case 'low': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-amber-100 text-amber-800';
-      case 'high': return 'bg-red-100 text-red-800';
+      case 'low': return 'bg-green-100 text-green-800 border-green-300';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      case 'high': return 'bg-red-100 text-red-800 border-red-300';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -47,33 +47,48 @@ const SafetyMap = () => {
     <div className="grid lg:grid-cols-3 gap-6">
       {/* Map Visualization */}
       <div className="lg:col-span-2">
-        <Card className="h-96">
-          <CardHeader>
+        <Card className="h-96 border-2 border-purple-200">
+          <CardHeader className="safety-gradient text-white">
             <CardTitle className="flex items-center gap-2">
               <MapPin className="w-5 h-5" />
               Live Safety Heatmap
-              <Badge variant="outline" className="ml-auto">Real-time</Badge>
+              <Badge variant="outline" className="ml-auto bg-white/20 text-white border-white/30">Real-time</Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="relative h-64 bg-gradient-to-br from-blue-50 to-slate-100 rounded-lg overflow-hidden">
-              {/* Simulated Map with Safety Zones */}
+          <CardContent className="p-0">
+            <div className="relative h-64 bg-gradient-to-br from-purple-50 to-pink-50 overflow-hidden">
+              {/* Simulated Map with 3x2 Grid Layout */}
               <div className="absolute inset-0 p-4">
-                <div className="grid grid-cols-3 gap-2 h-full">
-                  {safetyZones.map((zone, index) => (
+                <div className="grid grid-cols-3 grid-rows-2 gap-2 h-full">
+                  {/* Top Row - 3 zones */}
+                  {safetyZones.slice(0, 3).map((zone, index) => (
                     <div
                       key={zone.id}
-                      className={`relative rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${getRiskColor(zone.riskLevel)} opacity-70 hover:opacity-90`}
+                      className={`relative rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg ${getRiskColor(zone.riskLevel)} opacity-80 hover:opacity-95`}
                       onClick={() => setSelectedZone(zone)}
-                      style={{
-                        gridColumn: index === 3 ? 'span 2' : 'span 1',
-                        gridRow: index >= 4 ? '2' : '1'
-                      }}
                     >
-                      <div className="absolute inset-2 bg-white/20 rounded flex items-center justify-center">
-                        <div className="text-center text-white text-sm font-medium">
-                          <div className="text-xs opacity-90">{zone.name}</div>
+                      <div className="absolute inset-2 bg-white/25 rounded flex items-center justify-center backdrop-blur-sm">
+                        <div className="text-center text-white text-sm font-medium drop-shadow-lg">
+                          <div className="text-xs opacity-90 font-semibold">{zone.name}</div>
                           <div className="text-lg font-bold">{zone.incidents}</div>
+                          <div className="text-xs opacity-75">incidents</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Bottom Row - 3 zones */}
+                  {safetyZones.slice(3, 6).map((zone, index) => (
+                    <div
+                      key={zone.id}
+                      className={`relative rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-lg ${getRiskColor(zone.riskLevel)} opacity-80 hover:opacity-95`}
+                      onClick={() => setSelectedZone(zone)}
+                    >
+                      <div className="absolute inset-2 bg-white/25 rounded flex items-center justify-center backdrop-blur-sm">
+                        <div className="text-center text-white text-sm font-medium drop-shadow-lg">
+                          <div className="text-xs opacity-90 font-semibold">{zone.name}</div>
+                          <div className="text-lg font-bold">{zone.incidents}</div>
+                          <div className="text-xs opacity-75">incidents</div>
                         </div>
                       </div>
                     </div>
@@ -82,20 +97,20 @@ const SafetyMap = () => {
               </div>
               
               {/* Legend */}
-              <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
-                <div className="text-xs font-medium mb-2">Risk Level</div>
+              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg border border-purple-200">
+                <div className="text-xs font-semibold mb-2 text-purple-800">Risk Level</div>
                 <div className="flex gap-3">
                   <div className="flex items-center gap-1">
-                    <div className="w-3 h-3 bg-green-500 rounded"></div>
-                    <span className="text-xs">Low</span>
+                    <div className="w-3 h-3 zone-safe rounded"></div>
+                    <span className="text-xs font-medium">Safe</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="w-3 h-3 bg-amber-500 rounded"></div>
-                    <span className="text-xs">Medium</span>
+                    <div className="w-3 h-3 zone-moderate rounded"></div>
+                    <span className="text-xs font-medium">Moderate</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="w-3 h-3 bg-red-500 rounded"></div>
-                    <span className="text-xs">High</span>
+                    <div className="w-3 h-3 zone-danger rounded"></div>
+                    <span className="text-xs font-medium">High Risk</span>
                   </div>
                 </div>
               </div>
@@ -106,65 +121,65 @@ const SafetyMap = () => {
 
       {/* Zone Details */}
       <div className="space-y-4">
-        <Card>
-          <CardHeader>
+        <Card className="border-2 border-purple-200">
+          <CardHeader className="safety-gradient text-white">
             <CardTitle className="text-lg">Zone Details</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             {selectedZone ? (
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-lg">{selectedZone.name}</h3>
-                  <Badge className={getRiskBadge(selectedZone.riskLevel)}>
+                  <h3 className="font-bold text-lg text-purple-800">{selectedZone.name}</h3>
+                  <Badge className={`${getRiskBadge(selectedZone.riskLevel)} font-semibold`}>
                     {selectedZone.riskLevel.toUpperCase()} RISK
                   </Badge>
                 </div>
                 
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Active Incidents:</span>
-                    <span className="font-medium">{selectedZone.incidents}</span>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground font-medium">Active Incidents:</span>
+                    <span className="font-bold text-lg text-purple-700">{selectedZone.incidents}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Last Updated:</span>
-                    <span className="font-medium">{selectedZone.lastUpdated}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground font-medium">Last Updated:</span>
+                    <span className="font-semibold text-purple-600">{selectedZone.lastUpdated}</span>
                   </div>
                 </div>
 
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 font-semibold">
                   Avoid This Area
                 </Button>
               </div>
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                <MapPin className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>Click on a zone to view details</p>
+                <MapPin className="w-12 h-12 mx-auto mb-3 opacity-50 text-purple-400" />
+                <p className="font-medium">Click on a zone to view details</p>
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* Quick Stats */}
-        <Card>
-          <CardHeader>
+        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200">
+          <CardHeader className="safety-gradient text-white">
             <CardTitle className="text-lg">City Safety Overview</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-3 p-6">
             <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Overall Safety Score</span>
-              <Badge className="bg-green-100 text-green-800">87/100</Badge>
+              <span className="text-purple-700 font-medium">Overall Safety Score</span>
+              <Badge className="bg-green-500 text-white font-bold text-sm px-3 py-1">87/100</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Active Incidents</span>
-              <span className="font-medium">30</span>
+              <span className="text-purple-700 font-medium">Active Incidents</span>
+              <span className="font-bold text-lg text-purple-800">30</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Safe Routes Available</span>
-              <span className="font-medium">142</span>
+              <span className="text-purple-700 font-medium">Safe Routes Available</span>
+              <span className="font-bold text-lg text-purple-800">142</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Community Reports</span>
-              <span className="font-medium">68 today</span>
+              <span className="text-purple-700 font-medium">Community Reports</span>
+              <span className="font-bold text-lg text-purple-800">68 today</span>
             </div>
           </CardContent>
         </Card>

@@ -23,7 +23,7 @@ const FloatingChatIcon = ({ onClick, isActive }: FloatingChatIconProps) => {
         {/* Notification badge */}
         {!isActive && (
           <Badge 
-            className="absolute -top-2 -right-2 bg-red-500 text-white animate-pulse z-10 pointer-events-none"
+            className="absolute -top-2 -right-2 bg-red-500 text-white animate-pulse z-10 pointer-events-none font-bold"
             variant="destructive"
           >
             AI
@@ -33,10 +33,10 @@ const FloatingChatIcon = ({ onClick, isActive }: FloatingChatIconProps) => {
         {/* Main chat button */}
         <Button
           onClick={handleClick}
-          className={`w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer ${
+          className={`w-14 h-14 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer font-bold ${
             isActive 
-              ? 'bg-red-500 hover:bg-red-600' 
-              : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800'
+              ? 'emergency-gradient hover:scale-110' 
+              : 'safety-gradient hover:scale-110 animate-glow'
           } ${isHovered ? 'scale-110' : 'scale-100'}`}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -51,15 +51,15 @@ const FloatingChatIcon = ({ onClick, isActive }: FloatingChatIconProps) => {
 
         {/* Floating tooltip */}
         {isHovered && !isActive && (
-          <div className="absolute bottom-16 right-0 bg-black text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap animate-slide-up pointer-events-none">
+          <div className="absolute bottom-16 right-0 bg-purple-800 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap animate-slide-up pointer-events-none font-medium shadow-xl">
             Need help? Chat with SaferStep AI
-            <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black"></div>
+            <div className="absolute top-full right-3 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-purple-800"></div>
           </div>
         )}
 
         {/* Pulsing ring animation when not active */}
         {!isActive && (
-          <div className="absolute inset-0 rounded-full border-2 border-blue-400 animate-ping opacity-30 pointer-events-none"></div>
+          <div className="absolute inset-0 rounded-full border-2 border-purple-400 animate-ping opacity-40 pointer-events-none"></div>
         )}
       </div>
     </div>

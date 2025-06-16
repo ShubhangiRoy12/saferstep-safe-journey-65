@@ -40,17 +40,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       {/* Header */}
-      <header className="safety-gradient text-white p-4 shadow-lg">
+      <header className="safety-gradient text-white p-4 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center animate-glow">
               <MapPin className="w-6 h-6" />
             </div>
             <div>
               <h1 className="text-2xl font-bold">SaferStep</h1>
-              <p className="text-blue-100 text-sm">Navigate not just faster, but safer</p>
+              <p className="text-purple-100 text-sm">Navigate not just faster, but safer</p>
             </div>
           </div>
           
@@ -60,7 +60,7 @@ const Index = () => {
               variant={isEmergencyMode ? "destructive" : "secondary"}
               size="sm"
               onClick={() => setIsEmergencyMode(!isEmergencyMode)}
-              className={isEmergencyMode ? "animate-pulse-emergency" : ""}
+              className={`font-semibold ${isEmergencyMode ? "animate-pulse-emergency emergency-gradient" : "bg-white/20 text-white hover:bg-white/30"}`}
             >
               <Phone className="w-4 h-4 mr-2" />
               {isEmergencyMode ? "Emergency Active" : "Emergency"}
@@ -79,22 +79,22 @@ const Index = () => {
       {/* Main Navigation */}
       <div className="max-w-7xl mx-auto p-4 space-y-6">
         {/* Quick Search */}
-        <Card className="animate-slide-up">
-          <CardHeader>
+        <Card className="animate-slide-up border-2 border-purple-200 shadow-lg">
+          <CardHeader className="safety-gradient text-white">
             <CardTitle className="flex items-center gap-2">
               <Search className="w-5 h-5" />
               Where would you like to go safely?
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             <div className="flex gap-3">
               <Input
                 placeholder="Enter destination address..."
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="flex-1"
+                className="flex-1 border-purple-200 focus:border-purple-500 focus:ring-purple-500"
               />
-              <Button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
+              <Button className="cta-button text-white font-semibold px-6 hover:shadow-lg">
                 Find Safe Route
               </Button>
             </div>
@@ -115,17 +115,28 @@ const Index = () => {
               key={tab.id}
               variant={activeTab === tab.id ? 'default' : 'outline'}
               onClick={() => setActiveTab(tab.id)}
-              className="flex items-center gap-2 whitespace-nowrap"
+              className={`flex items-center gap-2 whitespace-nowrap font-medium transition-all duration-200 ${
+                activeTab === tab.id 
+                  ? 'cta-button text-white shadow-lg' 
+                  : 'border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300'
+              }`}
             >
               {tab.label}
-              <Badge variant="secondary" className="text-xs">
+              <Badge 
+                variant="secondary" 
+                className={`text-xs font-semibold ${
+                  activeTab === tab.id 
+                    ? 'bg-white/20 text-white' 
+                    : 'bg-purple-100 text-purple-700'
+                }`}
+              >
                 {tab.badge}
               </Badge>
             </Button>
           ))}
         </div>
 
-        <Separator />
+        <Separator className="bg-purple-200" />
 
         {/* Tab Content */}
         <div className="animate-slide-up">
