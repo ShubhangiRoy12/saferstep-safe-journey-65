@@ -41,7 +41,8 @@ We kept it lightweight and fast using:
 ## 📸 Sneak Peek
 
 Screenshots and video demo of real-time safe route planner, chatbot in action, and emergency UI.
-![image](https://github.com/user-attachments/assets/6e66fdc2-7fd4-4505-949b-4684ebd63b51)
+![image](https://github.com/user-attachments/assets/010cb4a7-39ec-4240-8d11-dd1246305cb9)
+
 
 
 ---
